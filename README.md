@@ -1,56 +1,80 @@
-# Gym Churn Prediction
+# Gym Churn Lab 🏋️‍♂️📊
 
-Project: end‑to‑end machine learning workflow to predict gym membership churn and explore customer segmentation.
+**Predict Retention. Visualize Trends. Optimize Revenue.**
 
-## Contents
+Gym Churn Lab is a sophisticated machine learning application designed to help fitness centers predict customer churn, visualize member behavior, and identify at-risk customers. Built with Streamlit and Scikit-Learn, it offers a powerful interface for both individual member analysis and bulk data processing.
 
-- `ML_notebook.ipynb` — Main notebook: data loading, EDA, preprocessing, baseline & advanced models, SHAP explainability, K‑Means clustering, model tuning and saving artifacts.
-- `gym_churn_us.csv` — Expected dataset (place in the notebook working directory).
-- `data/` — Output directory created by the notebook (saved model, metrics, README, requirements).
 
-## Quickstart
+## 🚀 Key Features
 
-1. Clone or copy this repository to your machine.
-2. Place the dataset `gym_churn_us.csv` in the repository root or update `DATA_PATH` in the notebook.
-3. Create and activate a Python environment (recommended):
+### 1. 🔮 Prediction Engine
+-   **Real-time Risk Assessment**: Input member details (demographics, engagement, behavior) to instantly calculate churn probability.
+-   **Actionable Insights**: Classifies members into **Low**, **Medium**, or **High** risk categories.
+-   **PDF Reporting**: Generate and download detailed individual risk reports for staff to take action.
 
-   - python 3.8+
-   - pip install -r data/requirements.txt (or manually install packages below)
+### 2. 📊 Analytics Dashboard
+-   **Business Intelligence**: Visualize key metrics like Total Customers, Churn Rate, Average Lifetime, and Estimated Revenue.
+-   **Interactive Charts**: Explore data distribution through dynamic Plotly charts (Donut charts, Bar graphs, Heatmaps).
+-   **Deep Dive**: Analyze the relationship between contract periods, age, additional charges, and retention.
 
-4. Launch the notebook:
-   - jupyter lab
-   - Open `ML_notebook.ipynb` and run cells in order.
+### 3. 📂 Batch Processor
+-   **Bulk Analysis**: Upload CSV files containing hundreds of member records.
+-   **Automated Scoring**: The system processes the entire batch, appending Churn Predictions and Confidence Scores.
+-   **Exportable Results**: Download improved datasets as CSV/JSON for further analysis or CRM integration.
 
-## Required packages (examples)
 
-- numpy, pandas, matplotlib, seaborn
-- scikit-learn, shap, joblib
-- scipy
+## ⚙️ Installation & Setup
 
-For an exact environment run (after first notebook run) `pip freeze > data/requirements.txt`.
+1.  **Clone the Repository**
+    ```bash
+    git clone <repository-url>
+    cd ML
+    ```
 
-## Notebook highlights
+2.  **Create a Virtual Environment** (Recommended)
+    ```bash
+    # Windows
+    python -m venv .venv
+    .\.venv\Scripts\activate
 
-- Data inspection, missing value analysis and EDA.
-- Preprocessing pipeline using ColumnTransformer (scaling, one‑hot encoding).
-- Baseline models: Logistic Regression, Decision Tree.
-- Advanced models: Random Forest, Gradient Boosting, MLP; cross‑validation and ROC‑AUC evaluation.
-- Explainability: SHAP for tree models; permutation importance for others.
-- K‑Means clustering on numeric features with elbow & silhouette evaluation and PCA visualization.
-- Hyperparameter tuning for MLP (RandomizedSearchCV) and saving the final pipeline and metrics to `data/`.
+    # Mac/Linux
+    python3 -m venv .venv
+    source .venv/bin/activate
+    ```
 
-## Outputs
+3.  **Install Dependencies**
+    ```bash
+    pip install streamlit pandas joblib plotly fpdf scikit-learn
+    ```
 
-- `data/final_mlp_pipeline.pkl` — saved sklearn pipeline (example).
-- `data/final_model_metrics.json` — metrics for the selected model.
-- `data/MODEL_README.txt` — brief usage snippet.
-- `data/requirements.txt` — environment requirements (optional).
+## ▶️ How to Run
 
-## Reproducing results
+Execute the following command in your terminal to launch the application:
 
-- Run the notebook from top to bottom to reproduce training, evaluation, SHAP plots and clustering.
-- For long steps (Kernel SHAP, RandomizedSearchCV) consider toggling or reducing sample sizes in the notebook parameters.
+```bash
+streamlit run streamlit/app.py
+```
 
-## Contact
+The app will open in your default browser at `http://localhost:8501`.
 
-For questions about the notebook structure or reproducing results, open an issue or contact the project owner.
+## 📁 Project Structure
+
+```
+ML/
+├── README.md                   # Project Documentation
+└── streamlit/                  # Application Source Code
+    ├── app.py                  # Main Streamlit Application
+    ├── background_magma.jpg    # Background Asset
+    ├── final_mlp_pipeline.pkl  # Trained ML Model
+    ├── gym_churn_us.csv        # Dataset for Dashboard
+    └── ...
+```
+
+## 🧠 Model Information
+
+The application utilizes a **Multi-Layer Perceptron (MLP)** pipeline trained on historical gym membership data. It considers features such as:
+-   **Demographics**: Gender, Age
+-   **Engagement**: Lifetime, Contract Period, Group Visits, Frequency
+-   **Behavior**: Additional Charges, Proximity to Gym, Partner Programs
+
+

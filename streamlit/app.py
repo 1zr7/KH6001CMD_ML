@@ -24,7 +24,7 @@ import base64
 import os
 
 def load_bg_image():
-    path = r"c:\Users\h1zr7\OneDrive\Desktop\anti gravity\test\background_magma.jpg"
+    path = r"streamlit\background_magma.jpg"
     
     if not os.path.exists(path):
         st.error(f"CRITICAL: Image file missing at {path}")
@@ -191,16 +191,24 @@ div[data-testid="stMetricValue"] {{
 # ====== HELPERS ======
 @st.cache_resource
 def load_model():
+    # Hot-fix for version mismatch (sklearn <1.4 vs >1.4)
+    import sklearn.compose._column_transformer
+    if not hasattr(sklearn.compose._column_transformer, '_RemainderColsList'):
+        class _RemainderColsList(list):
+            pass
+        sklearn.compose._column_transformer._RemainderColsList = _RemainderColsList
+        
     try:
-        model = joblib.load('final_mlp_pipeline.pkl')
+        model = joblib.load(r'streamlit\final_mlp_pipeline.pkl')
         return model
-    except:
+    except Exception as e:
+        st.error(f"Error loading model: {e}")
         return None
 
 @st.cache_data
 def load_data():
-    if os.path.exists('gym_churn_us.csv'):
-        return pd.read_csv('gym_churn_us.csv')
+    if os.path.exists(r'streamlit\gym_churn_us.csv'):
+        return pd.read_csv(r'streamlit\gym_churn_us.csv')
     return None
 
 def create_pdf(prediction, probability, input_data):
@@ -353,7 +361,8 @@ with tab1:
                 'Month_to_end_contract': month_end,
                 'Lifetime': lifetime,
                 'Avg_class_frequency_total': freq_total,
-                'Avg_class_frequency_current_month': freq_curr
+                'Avg_class_frequency_current_month': freq_curr,
+                'kmeans_cluster': 4 # Default cluster for model compatibility
             }
             
             # Predict
@@ -462,7 +471,7 @@ with tab2:
             )
             st.plotly_chart(fig_bar, use_container_width=True)
             
-            st.plotly_chart(fig_bar, use_container_width=True)
+
             
         r2_c1, r2_c2 = st.columns(2)
         
@@ -514,6 +523,10 @@ with tab3:
         if st.button("RUN BATCH ANALYSIS", type="primary"):
             with st.spinner("Processing..."):
                 try:
+                    # Inject missing cluster column for batch
+                    if 'kmeans_cluster' not in bdf.columns:
+                        bdf['kmeans_cluster'] = 4
+                        
                     preds = model.predict(bdf)
                     probs = model.predict_proba(bdf)[:, 1]
                     bdf['Churn_Prediction'] = preds
